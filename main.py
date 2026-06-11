@@ -1,14 +1,4 @@
-"""
-Engaje-se · Painel de Segmentação
-----------------------------------
-Dashboard para análise dos dados coletados pelo formulário Engaje-se.
-Filtra, visualiza e exporta cadastros de voluntários por região,
-perfil demográfico, temas de interesse e formas de participação.
 
-Para rodar localmente:
-    pip install streamlit pandas plotly
-    streamlit run app.py
-"""
 
 import io
 import os
@@ -19,9 +9,7 @@ import plotly.express as px
 import streamlit as st
 
 
-# ─────────────────────────────────────────────
-# CONFIGURAÇÃO DA PÁGINA
-# ─────────────────────────────────────────────
+
 
 st.set_page_config(
     page_title="Engaje-se · Segmentação",
@@ -92,7 +80,7 @@ FAIXAS_ETARIAS = ["< 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+", "N
 
 CORES = ["#e63946", "#457b9d", "#2a9d8f", "#e9c46a", "#f4a261", "#264653", "#a8dadc"]
 
-ALTURA_GRAFICO = 380  # altura padrão dos gráficos em pixels
+ALTURA_GRAFICO = 380
 
 
 
@@ -232,7 +220,7 @@ def carregar_dados(conteudo_csv: bytes) -> pd.DataFrame:
     return df
 
 
-# ─────────────────────────────────────────────
+
 
 
 st.title("🗳️ Engaje-se · Painel de Segmentação")
@@ -346,9 +334,6 @@ card_kpi(col4, "Estados",            str(total_estados))
 st.markdown("---")
 
 
-# ─────────────────────────────────────────────
-# ABAS
-# ─────────────────────────────────────────────
 
 aba_visao_geral, aba_panfletadores, aba_dados = st.tabs([
     "📊 Visão Geral",
@@ -357,9 +342,6 @@ aba_visao_geral, aba_panfletadores, aba_dados = st.tabs([
 ])
 
 
-# ═════════════════════════════════════════════
-# ABA 1 · VISÃO GERAL
-# ═════════════════════════════════════════════
 
 with aba_visao_geral:
 
@@ -404,7 +386,6 @@ with aba_visao_geral:
             use_container_width=True, config=CONFIG_GRAFICO,
         )
 
-    # Distribuição por Gênero e por Ocupação
     col_genero, col_ocupacao = st.columns(2)
 
     with col_genero:
@@ -432,7 +413,6 @@ with aba_visao_geral:
             use_container_width=True, config=CONFIG_GRAFICO,
         )
 
-    # Faixa Etária e Temas de Interesse
     col_idade, col_temas = st.columns(2)
 
     with col_idade:
@@ -462,7 +442,6 @@ with aba_visao_geral:
             use_container_width=True, config=CONFIG_GRAFICO,
         )
 
-    # Como as pessoas querem participar
     cabecalho_secao("Como Querem Ajudar")
     df_ajuda = pd.DataFrame({
         "Forma": list(FORMAS_DE_AJUDA.values()),
@@ -475,9 +454,6 @@ with aba_visao_geral:
     st.plotly_chart(fig, use_container_width=True, config=CONFIG_GRAFICO)
 
 
-# ═════════════════════════════════════════════
-# ABA 2 · PANFLETADORES
-# ═════════════════════════════════════════════
 
 with aba_panfletadores:
     panfletadores = filtrado[filtrado["_ajuda_participateinleafleting"]].copy()
@@ -587,7 +563,6 @@ with aba_dados:
         help="Todos os campos, com os filtros aplicados",
     )
 
-    # Exportação agrupada por cidade
     agrupado_por_cidade = (
         filtrado[filtrado["Cidade"] != "Não informado"]
         .groupby(["Estado", "Cidade"])
